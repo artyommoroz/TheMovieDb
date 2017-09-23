@@ -1,11 +1,11 @@
 package com.frost.themoviedb.network.response;
 
-import com.frost.themoviedb.network.model.MovieItem;
+import com.frost.themoviedb.network.model.Movie;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class MovieItemsResponse {
+public class MoviesResponse extends BaseResponse {
 
     @SerializedName("page")
     private int page;
@@ -14,7 +14,7 @@ public class MovieItemsResponse {
     @SerializedName("total_pages")
     private int totalPages;
     @SerializedName("results")
-    private List<MovieItem> movieItems;
+    private List<Movie> movies;
 
     public int getPage() {
         return page;
@@ -40,11 +40,11 @@ public class MovieItemsResponse {
         this.totalPages = totalPages;
     }
 
-    public List<MovieItem> getMovieItems() {
-        return movieItems;
+    public List<Movie> getMovies() {
+        return movies;
     }
 
-    public void setMovieItems(List<MovieItem> movieItems) {
-        this.movieItems = movieItems;
+    public void setMovies(List<Movie> movies) {
+        this.movies = movies;
     }
 }
