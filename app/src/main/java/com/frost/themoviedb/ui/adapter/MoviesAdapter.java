@@ -50,7 +50,6 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(MoviesAdapter.ViewHolder holder, int position) {
-        holder.setIsRecyclable(false);
         Movie movie = movies.get(position);
         holder.textViewTitle.setText(movie.getTitle());
         holder.textViewOverview.setText(movie.getOverview());

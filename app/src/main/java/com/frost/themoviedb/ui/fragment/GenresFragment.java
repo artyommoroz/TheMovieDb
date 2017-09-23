@@ -1,25 +1,61 @@
 package com.frost.themoviedb.ui.fragment;
 
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.ProgressBar;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.frost.themoviedb.R;
+import com.frost.themoviedb.network.model.Genre;
 import com.frost.themoviedb.presentation.presenter.GenresPresenter;
 import com.frost.themoviedb.presentation.view.GenresView;
+import com.frost.themoviedb.ui.adapter.AdapterClickListener;
+import com.frost.themoviedb.ui.adapter.GenresAdapter;
 
-public class GenresFragment extends BaseFragment implements GenresView {
+import java.util.ArrayList;
+import java.util.List;
+
+import butterknife.BindView;
+
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+
+public class GenresFragment extends BaseFragment implements GenresView, AdapterClickListener<Genre> {
 
     @InjectPresenter
     GenresPresenter presenter;
 
+    @BindView(R.id.progress_bar)
+    ProgressBar progressBar;
+    @BindView(R.id.recycler_view)
+    RecyclerView recyclerView;
+    @BindView(R.id.content_view)
+
+    private GenresAdapter adapter;
+
     public static GenresFragment newInstance() {
         GenresFragment fragment = new GenresFragment();
-
         Bundle args = new Bundle();
         fragment.setArguments(args);
-
         return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+        presenter.loadGenres();
+    }
+
+    @Override
+    public void onViewCreated(final View view, final Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        initViews();
     }
 
     @Override
@@ -28,8 +64,50 @@ public class GenresFragment extends BaseFragment implements GenresView {
     }
 
     @Override
-    public void onViewCreated(final View view, final Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_genres, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_save) {
+            presenter.applyCheckedGenres(getCheckedGenres());
+        }
+        return false;
+    }
+
+    @Override
+    public void showProgress(boolean show) {
+        progressBar.setVisibility(show ? VISIBLE : GONE);
+    }
+
+    @Override
+    public void setGenres(List<Genre> genres) {
+        adapter.setGenres(genres);
+    }
+
+    @Override
+    public void onItemClicked(int position, Genre data) {
+        data.setChecked(!data.isChecked());
+        adapter.notifyItemChanged(position);
+    }
+
+    private void initViews() {
+        adapter = new GenresAdapter(getActivity(), this);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(),
+                LinearLayoutManager.VERTICAL, false);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(adapter);
+    }
+
+    private List<Genre> getCheckedGenres() {
+        List<Genre> checkedGenres = new ArrayList<>();
+        for (Genre genre : adapter.getGenres()) {
+            if (genre.isChecked()) {
+                checkedGenres.add(genre);
+            }
+        }
+        return checkedGenres;
     }
 }

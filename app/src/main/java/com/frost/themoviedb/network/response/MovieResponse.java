@@ -5,5 +5,13 @@ import com.frost.themoviedb.network.model.DetailedMovie;
 
 public class MovieResponse {
 
-    private DetailedMovie detailedMovie;
+    private DetailedMovie movie;
+
+    public DetailedMovie getMovie() {
+        return movie;
+    }
+
+    public void setMovie(DetailedMovie movie) {
+        this.movie = movie;
+    }
 }

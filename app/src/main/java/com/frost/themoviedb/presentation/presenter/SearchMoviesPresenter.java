@@ -4,7 +4,7 @@ package com.frost.themoviedb.presentation.presenter;
 import com.frost.themoviedb.App;
 import com.frost.themoviedb.Screens;
 import com.frost.themoviedb.manager.ApiManager;
-import com.frost.themoviedb.presentation.view.PopularMoviesView;
+import com.frost.themoviedb.presentation.view.MoviesView;
 import com.arellomobile.mvp.InjectViewState;
 
 import javax.inject.Inject;
@@ -12,19 +12,19 @@ import javax.inject.Inject;
 import ru.terrakok.cicerone.Router;
 
 @InjectViewState
-public class PopularMoviesPresenter extends BasePresenter<PopularMoviesView> {
+public class SearchMoviesPresenter extends BasePresenter<MoviesView> {
 
     @Inject
     ApiManager apiManager;
     @Inject
     Router router;
 
-    public PopularMoviesPresenter() {
+    public SearchMoviesPresenter() {
         App.getApplicationComponent().inject(this);
     }
 
-    public void loadPopularMovies(int page, String byGenres) {
-        unSubscribeOnDestroy(apiManager.getPopularMovies(page, "28")
+    public void loadMovies(String query) {
+        unSubscribeOnDestroy(apiManager.getMovies(query)
                 .subscribe(response -> {
                     getViewState().setMovies(response.getMovies());
                 }, throwable -> {
