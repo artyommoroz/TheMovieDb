@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/indent_16">
+
+        <ImageView
+            android:id="@+id/image_view_poster"
+            android:layout_width="64dp"
+            android:layout_height="64dp" />
+
+        <TextView
+            android:id="@+id/text_view_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/indent_8"
+            android:layout_toEndOf="@id/image_view_poster"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/text_size_16"
+            tools:text="Title" />
+
+        <TextView
+            android:id="@+id/text_view_overview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/text_view_title"
+            android:layout_marginStart="@dimen/indent_8"
+            android:layout_marginTop="@dimen/indent_4"
+            android:layout_toEndOf="@id/image_view_poster"
+            android:maxLines="2"
+            tools:text="Overview" />
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>

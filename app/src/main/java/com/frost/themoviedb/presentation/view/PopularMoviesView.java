@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface PopularMoviesView extends MvpView {
 
-    void setMovieItems(List<Movie> movies);
+    void setMovies(List<Movie> movies);
 }

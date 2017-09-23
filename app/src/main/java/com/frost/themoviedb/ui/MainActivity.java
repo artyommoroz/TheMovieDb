@@ -63,7 +63,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainActivityVi
         protected Fragment createFragment(String screenKey, Object data) {
             switch (screenKey) {
                 case Screens.CONTAINER_SCREEN:
-                    return PopularMoviesFragment.newInstance("222");
+                    return ContainerFragment.newInstance();
 //                case Screens.SEARCH_MOVIES_SCREEN:
 //                    return ProfileFragment.newInstance();
                 case Screens.MOVIE_SCREEN:

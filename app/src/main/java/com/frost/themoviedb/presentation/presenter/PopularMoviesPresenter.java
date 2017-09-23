@@ -5,9 +5,6 @@ import com.frost.themoviedb.App;
 import com.frost.themoviedb.manager.ApiManager;
 import com.frost.themoviedb.presentation.view.PopularMoviesView;
 import com.arellomobile.mvp.InjectViewState;
-import com.arellomobile.mvp.MvpPresenter;
-
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -28,7 +25,7 @@ public class PopularMoviesPresenter extends BasePresenter<PopularMoviesView> {
     public void loadPopularMovies(int page, String byGenres) {
         unSubscribeOnDestroy(apiManager.getPopularMovies(page, "28")
                 .subscribe(response -> {
-                    response.getStatusCode();
+                    getViewState().setMovies(response.getMovies());
 //                    if (response.isSuccess()) {
 //                        List<Comment> comments = response.getComments();
 //                        if (comments.isEmpty()) {
