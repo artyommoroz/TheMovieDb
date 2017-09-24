@@ -12,7 +12,10 @@ public class Genre implements Parcelable {
     private int id;
     @SerializedName("name")
     private String name;
-    private boolean isChecked;
+    private boolean isChecked = false;
+
+    public Genre() {
+    }
 
     public int getId() {
         return id;

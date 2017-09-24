@@ -1,28 +1,24 @@
-package com.frost.themoviedb.network.model;
+package com.frost.themoviedb.database.model;
 
 
-import com.google.gson.annotations.SerializedName;
+import com.frost.themoviedb.network.model.Genre;
 
 import java.util.List;
 
-public class DetailedMovie {
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
-    @SerializedName("id")
+public class DetailedMovieDb extends RealmObject {
+
+    @PrimaryKey
     private long id;
-    @SerializedName("title")
     private String title;
-    @SerializedName("poster_path")
     private String posterPath;
-    @SerializedName("overview")
     private String overview;
-    @SerializedName("release_date")
     private String releaseDate;
-    @SerializedName("vote_average")
     private double voteAverage;
-    @SerializedName("vote_count")
     private int voteCount;
-    @SerializedName("genres")
-    private List<Genre> genres = null;
+    private List<GenreDb> genres = null;
     private boolean isFavorite;
 
     public long getId() {
@@ -81,11 +77,19 @@ public class DetailedMovie {
         this.voteCount = voteCount;
     }
 
-    public List<Genre> getGenres() {
+    public List<GenreDb> getGenres() {
         return genres;
     }
 
-    public void setGenres(List<Genre> genres) {
+    public void setGenres(List<GenreDb> genres) {
         this.genres = genres;
+    }
+
+    public boolean isFavorite() {
+        return isFavorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        isFavorite = favorite;
     }
 }

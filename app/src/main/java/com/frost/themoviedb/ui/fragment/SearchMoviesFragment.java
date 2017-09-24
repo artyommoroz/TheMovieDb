@@ -7,6 +7,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -19,6 +20,7 @@ import com.frost.themoviedb.R;
 import com.frost.themoviedb.network.model.Movie;
 import com.frost.themoviedb.presentation.presenter.SearchMoviesPresenter;
 import com.frost.themoviedb.presentation.view.MoviesView;
+import com.frost.themoviedb.ui.MainActivity;
 import com.frost.themoviedb.ui.adapter.AdapterClickListener;
 import com.frost.themoviedb.ui.adapter.MoviesAdapter;
 
@@ -28,12 +30,15 @@ import butterknife.BindView;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
+import static com.frost.themoviedb.ui.adapter.MoviesAdapter.MOVIE_TYPE_SEARCH;
 
 public class SearchMoviesFragment extends BaseFragment implements MoviesView, AdapterClickListener<Movie> {
 
     @InjectPresenter
     SearchMoviesPresenter presenter;
 
+    @BindView(R.id.toolbar_search)
+    Toolbar toolbar;
     @BindView(R.id.progress_bar)
     ProgressBar progressBar;
     @BindView(R.id.text_view_empty)
@@ -43,6 +48,8 @@ public class SearchMoviesFragment extends BaseFragment implements MoviesView, Ad
     @BindView(R.id.content_view)
     SwipeRefreshLayout contentView;
 
+    // Initialize with default value because API requires query at least 1 character long
+    private String query;
     private MoviesAdapter adapter;
 
     public static SearchMoviesFragment newInstance() {
@@ -71,20 +78,38 @@ public class SearchMoviesFragment extends BaseFragment implements MoviesView, Ad
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_genres, menu);
-        MenuItem search = menu.findItem(R.id.action_search);
-        SearchView searchView = (SearchView) MenuItemCompat.getActionView(search);
+        inflater.inflate(R.menu.menu_search, menu);
+        MenuItem searchMenuItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchMenuItem);
         //TODO add Rx's debounce operator
+        searchMenuItem.expandActionView();
+        searchView.setIconifiedByDefault(false);
+        searchView.setQuery(query, false);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                presenter.loadMovies(query);
-                return true;
+                return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                if (!newText.isEmpty()) {
+                    query = newText;
+                    presenter.loadMovies(newText);
+                }
                 return false;
+            }
+        });
+        MenuItemCompat.setOnActionExpandListener(searchMenuItem, new MenuItemCompat.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                presenter.onBackPressed();
+                return true;
             }
         });
         super.onCreateOptionsMenu(menu, inflater);
@@ -111,7 +136,9 @@ public class SearchMoviesFragment extends BaseFragment implements MoviesView, Ad
     }
 
     private void initViews() {
-        adapter = new MoviesAdapter(getActivity(), this);
+        ((MainActivity) getActivity()).setSupportActionBar(toolbar);
+
+        adapter = new MoviesAdapter(getActivity(), MOVIE_TYPE_SEARCH, this);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(),
                 LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);

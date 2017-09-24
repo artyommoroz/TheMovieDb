@@ -22,11 +22,12 @@ import butterknife.BindView;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
+import static com.frost.themoviedb.ui.adapter.MoviesAdapter.MOVIE_TYPE_POPULAR;
 
 public class PopularMoviesFragment extends BaseFragment implements PopularMoviesView,
         AdapterClickListener<Movie> {
 
-    private static final String BY_GENRES_EXTRA = "by_genres_extra";
+    private static final String WITH_GENRES_EXTRA = "with_genres_extra";
 
     @InjectPresenter
     PopularMoviesPresenter presenter;
@@ -41,12 +42,13 @@ public class PopularMoviesFragment extends BaseFragment implements PopularMovies
     SwipeRefreshLayout contentView;
 
     private MoviesAdapter adapter;
+    private String withGenres;
 
-    public static PopularMoviesFragment newInstance(String byGenres) {
+    public static PopularMoviesFragment newInstance(String withGenres) {
         PopularMoviesFragment fragment = new PopularMoviesFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
-        args.putString(BY_GENRES_EXTRA, byGenres);
+        args.putString(WITH_GENRES_EXTRA, withGenres);
         return fragment;
     }
 
@@ -54,8 +56,8 @@ public class PopularMoviesFragment extends BaseFragment implements PopularMovies
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            String byGenres = getArguments().getString(BY_GENRES_EXTRA);
-            presenter.loadPopularMovies(1, byGenres);
+            withGenres = getArguments().getString(WITH_GENRES_EXTRA);
+            presenter.loadPopularMovies(1, withGenres);
         }
     }
 
@@ -77,16 +79,22 @@ public class PopularMoviesFragment extends BaseFragment implements PopularMovies
 
     @Override
     public void setMovies(List<Movie> movies) {
+        contentView.setRefreshing(false);
         adapter.setMovies(movies);
     }
 
     @Override
     public void showEmptyView(boolean show) {
+        contentView.setRefreshing(false);
         textViewEmpty.setVisibility(show ? VISIBLE : GONE);
     }
 
     private void initViews() {
-        adapter = new MoviesAdapter(getActivity(), this);
+        contentView.setOnRefreshListener(() -> {
+            presenter.loadPopularMovies(1, withGenres);
+        });
+
+        adapter = new MoviesAdapter(getActivity(), MOVIE_TYPE_POPULAR, this);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(),
                 LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);

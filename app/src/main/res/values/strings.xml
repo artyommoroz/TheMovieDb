@@ -1,13 +1,20 @@
 <resources>
     <string name="app_name">TheMovieDb</string>
 
-    <string name="popular_movies_title">Popular</string>
-    <string name="favorite_movies_title">Favorite</string>
+    <string name="popular_movies_toolbar_title">Popular</string>
+    <string name="favorite_movies_toolbar_title">Favorite</string>
+    <string name="genres_toolbar_title">Genres</string>
 
-    <string name="detailed_movie_vote_count">Количество оценок: %d</string>
-    <string name="detailed_movie_vote_average">Средняя оценка: %.1f</string>
     <string name="menu_genres_save">Save</string>
     <string name="menu_container_search">Search</string>
     <string name="menu_container_filter">Filter</string>
-    <string name="search">menu_search_search</string>
+    <string name="menu_search_search">Search</string>
+
+    <string name="detailed_movie_toolbar_title">Movie</string>
+    <string name="detailed_movie_vote_count">Score number: %d</string>
+    <string name="detailed_movie_vote_average">Average score: %.1f</string>
+    <string name="detailed_movie_add_to_favorites">Add to favorites</string>
+    <string name="detailed_movie_delete_from_favorites">Delete from favorites</string>
+    <string name="detailed_movie_toast_add_to_favorites">Movie has been successfully added to favorites!</string>
+    <string name="detailed_movie_toast_delete_from_favorites">Movie has been successfully deleted from favorites!</string>
 </resources>

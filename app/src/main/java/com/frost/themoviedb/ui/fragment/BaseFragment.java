@@ -4,9 +4,11 @@ package com.frost.themoviedb.ui.fragment;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.arellomobile.mvp.MvpAppCompatFragment;
 
@@ -34,4 +36,8 @@ public abstract class BaseFragment extends MvpAppCompatFragment {
 
     @LayoutRes
     protected abstract int getLayoutRes();
+
+    public void showToastMessage(@StringRes int message) {
+        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+    }
 }

@@ -6,5 +6,5 @@ public interface ContainerView extends MvpView {
 
     void setToolbarSubtitle(String subtitle);
 
-    void setQuery(String query);
+    void setGenres(String withGenres);
 }

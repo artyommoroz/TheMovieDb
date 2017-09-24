@@ -40,10 +40,10 @@ public class ContainerPresenter extends BasePresenter<ContainerView> {
                 genresString.append(genre.getId()).append(",");
             }
             // Remove last comma
-            genresString.substring(0, genresString.length() - 1);
-            getViewState().setQuery(genresString.toString());
+            String withGenres = genresString.toString().substring(0, genresString.length() - 1);
+            getViewState().setGenres(withGenres);
         } else {
-            getViewState().setQuery(null);
+            getViewState().setGenres(null);
         }
     }
 

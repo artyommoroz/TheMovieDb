@@ -3,7 +3,9 @@ package com.frost.themoviedb.presentation.presenter;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.frost.themoviedb.App;
-import com.frost.themoviedb.manager.ApiManager;
+import com.frost.themoviedb.network.ApiManager;
+import com.frost.themoviedb.network.model.DetailedMovie;
+import com.frost.themoviedb.network.model.Movie;
 import com.frost.themoviedb.presentation.view.DetailedMovieView;
 
 import javax.inject.Inject;
@@ -25,9 +27,17 @@ public class DetailedMoviePresenter extends BasePresenter<DetailedMovieView> {
     public void loadMovie(long movieId) {
         unSubscribeOnDestroy(apiManager.getMovie(movieId)
                 .subscribe(response -> {
-                    getViewState().setMovie(response.getMovie());
+                    getViewState().setMovie(response);
                 }, throwable -> {
                     throwable.getCause();
                 }));
+    }
+
+    public void addToFavorites(DetailedMovie movie) {
+        getViewState().onMovieAddedToFavorites();
+    }
+
+    public void deleteFromFavorites(long movieId) {
+        getViewState().onMovieDeletedFromFavorites();
     }
 }

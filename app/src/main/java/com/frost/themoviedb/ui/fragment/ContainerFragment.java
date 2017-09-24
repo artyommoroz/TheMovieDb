@@ -3,6 +3,7 @@ package com.frost.themoviedb.ui.fragment;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -13,6 +14,7 @@ import com.frost.themoviedb.R;
 import com.frost.themoviedb.network.model.Genre;
 import com.frost.themoviedb.presentation.presenter.ContainerPresenter;
 import com.frost.themoviedb.presentation.view.ContainerView;
+import com.frost.themoviedb.ui.MainActivity;
 import com.frost.themoviedb.ui.adapter.ContainerPagerAdapter;
 
 import java.util.ArrayList;
@@ -27,6 +29,8 @@ public class ContainerFragment extends BaseFragment implements ContainerView {
     @InjectPresenter
     ContainerPresenter presenter;
 
+    @BindView(R.id.toolbar_container)
+    Toolbar toolbar;
     @BindView(R.id.tab_layout)
     TabLayout tabLayout;
     @BindView(R.id.viewpager)
@@ -75,27 +79,33 @@ public class ContainerFragment extends BaseFragment implements ContainerView {
     @Override
     public void onViewCreated(final View view, final Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        initViews();
         presenter.convertGenreNamesToString(genres);
         presenter.convertGenreIdsToString(genres);
     }
 
     @Override
     public void setToolbarSubtitle(String subtitle) {
-
+        toolbar.setSubtitle(subtitle);
     }
 
     @Override
-    public void setQuery(String query) {
+    public void setGenres(String withGenres) {
         List<BaseFragment> fragments = new ArrayList<>();
-        fragments.add(PopularMoviesFragment.newInstance(query));
+        fragments.add(PopularMoviesFragment.newInstance(withGenres));
         fragments.add(FavoriteMoviesFragment.newInstance());
         List<String> titles = new ArrayList<>();
-        titles.add(getString(R.string.popular_movies_title));
-        titles.add(getString(R.string.favorite_movies_title));
+        titles.add(getString(R.string.popular_movies_toolbar_title));
+        titles.add(getString(R.string.favorite_movies_toolbar_title));
         ContainerPagerAdapter pagerAdapter = new ContainerPagerAdapter(getChildFragmentManager(),
                 fragments, titles);
 
         viewPager.setAdapter(pagerAdapter);
         tabLayout.setupWithViewPager(viewPager, true);
+    }
+
+    private void initViews() {
+        toolbar.setTitle("TMbd");
+        ((MainActivity) getActivity()).setSupportActionBar(toolbar);
     }
 }

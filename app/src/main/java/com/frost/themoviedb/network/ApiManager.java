@@ -1,10 +1,9 @@
-package com.frost.themoviedb.manager;
+package com.frost.themoviedb.network;
 
 
-import com.frost.themoviedb.network.ApiService;
+import com.frost.themoviedb.network.model.DetailedMovie;
 import com.frost.themoviedb.network.response.GenresResponse;
 import com.frost.themoviedb.network.response.MoviesResponse;
-import com.frost.themoviedb.network.response.MovieResponse;
 
 import javax.inject.Inject;
 
@@ -33,8 +32,8 @@ public class ApiManager {
         return apiService.getMovies(HARDCODED_API_KEY, query).compose(applySchedulers());
     }
 
-    public Observable<MovieResponse> getMovie(long movieId) {
-        return apiService.getMovie(HARDCODED_API_KEY, movieId).compose(applySchedulers());
+    public Observable<DetailedMovie> getMovie(long movieId) {
+        return apiService.getMovie(movieId, HARDCODED_API_KEY).compose(applySchedulers());
     }
 
     public Observable<GenresResponse> getGenres() {

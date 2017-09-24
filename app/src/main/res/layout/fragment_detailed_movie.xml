@@ -5,7 +5,12 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <include
+        android:id="@+id/toolbar_detailed_movie"
+        layout="@layout/toolbar" />
+
     <ImageView
+        android:layout_below="@id/toolbar_detailed_movie"
         android:id="@+id/image_view_poster"
         android:layout_width="match_parent"
         android:layout_height="250dp" />
@@ -69,5 +74,21 @@
         android:layout_marginTop="@dimen/indent_4"
         android:maxLines="2"
         tools:text="Thriller, Comedy" />
+
+    <Button
+        android:id="@+id/button_add_to_favorites"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/text_view_genres"
+        android:layout_centerHorizontal="true"
+        android:text="@string/detailed_movie_add_to_favorites" />
+
+    <Button
+        android:id="@+id/button_delete_from_favorites"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/button_add_to_favorites"
+        android:layout_centerHorizontal="true"
+        android:text="@string/detailed_movie_delete_from_favorites" />
 
 </RelativeLayout>

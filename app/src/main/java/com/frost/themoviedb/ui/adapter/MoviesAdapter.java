@@ -20,16 +20,24 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
 import static com.frost.themoviedb.common.Constants.IMAGE_PATH;
 
 public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder> {
 
+    public static final int MOVIE_TYPE_POPULAR = 1;
+    public static final int MOVIE_TYPE_FAVORITE = 2;
+    public static final int MOVIE_TYPE_SEARCH = 3;
+
     private List<Movie> movies = new ArrayList<>();
     private Context context;
+    private int movieType;
     private AdapterClickListener<Movie> clickListener;
 
-    public MoviesAdapter(Context context, AdapterClickListener<Movie> clickListener) {
+    public MoviesAdapter(Context context, int movieType, AdapterClickListener<Movie> clickListener) {
         this.context = context;
+        this.movieType = movieType;
         this.clickListener = clickListener;
     }
 
@@ -53,11 +61,14 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
         Movie movie = movies.get(position);
         holder.textViewTitle.setText(movie.getTitle());
         holder.textViewOverview.setText(movie.getOverview());
+        holder.textViewReleaseDate.setText(String.valueOf(movie.getReleaseDate()));
+
+        holder.textViewOverview.setVisibility(movieType != MOVIE_TYPE_SEARCH ? VISIBLE : GONE);
+        holder.textViewReleaseDate.setVisibility(movieType == MOVIE_TYPE_SEARCH ? VISIBLE : GONE);
 
         if (!TextUtils.isEmpty(movie.getPosterPath())) {
             Glide.with(context)
                     .load(IMAGE_PATH + movie.getPosterPath())
-//                    .transform(new RoundedCornersTransformation(5, 0))
                     .into(holder.imageViewPoster);
         }
         holder.root.setOnClickListener(view -> {
@@ -80,6 +91,8 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
         TextView textViewTitle;
         @BindView(R.id.text_view_overview)
         TextView textViewOverview;
+        @BindView(R.id.text_view_release_date)
+        TextView textViewReleaseDate;
 
         ViewHolder(View view) {
             super(view);

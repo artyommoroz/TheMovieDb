@@ -3,7 +3,7 @@ package com.frost.themoviedb.presentation.presenter;
 
 import com.frost.themoviedb.App;
 import com.frost.themoviedb.Screens;
-import com.frost.themoviedb.manager.ApiManager;
+import com.frost.themoviedb.network.ApiManager;
 import com.frost.themoviedb.presentation.view.MoviesView;
 import com.arellomobile.mvp.InjectViewState;
 
@@ -34,5 +34,9 @@ public class SearchMoviesPresenter extends BasePresenter<MoviesView> {
 
     public void switchToDetailedMovieScreen(long movieId) {
         router.navigateTo(Screens.MOVIE_SCREEN, movieId);
+    }
+
+    public void onBackPressed() {
+        router.exit();
     }
 }

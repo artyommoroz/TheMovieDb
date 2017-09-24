@@ -1,8 +1,10 @@
 package com.frost.themoviedb.ui.fragment;
 
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -14,6 +16,7 @@ import com.frost.themoviedb.R;
 import com.frost.themoviedb.network.model.Genre;
 import com.frost.themoviedb.presentation.presenter.GenresPresenter;
 import com.frost.themoviedb.presentation.view.GenresView;
+import com.frost.themoviedb.ui.MainActivity;
 import com.frost.themoviedb.ui.adapter.AdapterClickListener;
 import com.frost.themoviedb.ui.adapter.GenresAdapter;
 
@@ -30,11 +33,14 @@ public class GenresFragment extends BaseFragment implements GenresView, AdapterC
     @InjectPresenter
     GenresPresenter presenter;
 
+    @BindView(R.id.toolbar_genres)
+    Toolbar toolbar;
     @BindView(R.id.progress_bar)
     ProgressBar progressBar;
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
     @BindView(R.id.content_view)
+    SwipeRefreshLayout contentView;
 
     private GenresAdapter adapter;
 
@@ -94,6 +100,10 @@ public class GenresFragment extends BaseFragment implements GenresView, AdapterC
     }
 
     private void initViews() {
+        toolbar.setTitle(getString(R.string.genres_toolbar_title));
+        ((MainActivity) getActivity()).setSupportActionBar(toolbar);
+        ((MainActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         adapter = new GenresAdapter(getActivity(), this);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(),
                 LinearLayoutManager.VERTICAL, false);

@@ -3,11 +3,10 @@ package com.frost.themoviedb.presentation.presenter;
 
 import com.frost.themoviedb.App;
 import com.frost.themoviedb.Screens;
-import com.frost.themoviedb.manager.ApiManager;
+import com.frost.themoviedb.network.ApiManager;
 import com.frost.themoviedb.network.model.Genre;
 import com.frost.themoviedb.presentation.view.GenresView;
 import com.arellomobile.mvp.InjectViewState;
-import com.arellomobile.mvp.MvpPresenter;
 
 import java.util.List;
 
