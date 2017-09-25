@@ -13,8 +13,8 @@ import com.frost.themoviedb.R;
 import com.frost.themoviedb.network.model.DetailedMovie;
 import com.frost.themoviedb.presentation.presenter.FavoriteMoviesPresenter;
 import com.frost.themoviedb.presentation.view.FavoriteMoviesView;
-import com.frost.themoviedb.ui.adapter.AdapterClickListener;
 import com.frost.themoviedb.ui.adapter.DetailedMoviesAdapter;
+import com.frost.themoviedb.ui.adapter.RecyclerClickListener;
 
 import java.util.List;
 
@@ -23,7 +23,7 @@ import butterknife.BindView;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
-public class FavoriteMoviesFragment extends BaseFragment implements FavoriteMoviesView, AdapterClickListener<DetailedMovie> {
+public class FavoriteMoviesFragment extends BaseFragment implements FavoriteMoviesView, RecyclerClickListener {
 
     @InjectPresenter
     FavoriteMoviesPresenter presenter;
@@ -89,7 +89,7 @@ public class FavoriteMoviesFragment extends BaseFragment implements FavoriteMovi
     }
 
     @Override
-    public void onItemClicked(int position, DetailedMovie data) {
-        presenter.switchToDetailedMovieScreen(data.getId());
+    public void recyclerItemClicked(int position) {
+        presenter.switchToDetailedMovieScreen(adapter.getDetailedMovies().get(position).getId());
     }
 }

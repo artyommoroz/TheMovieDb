@@ -14,8 +14,8 @@ import com.frost.themoviedb.common.EndlessScrollListener;
 import com.frost.themoviedb.network.model.Movie;
 import com.frost.themoviedb.presentation.presenter.PopularMoviesPresenter;
 import com.frost.themoviedb.presentation.view.PopularMoviesView;
-import com.frost.themoviedb.ui.adapter.AdapterClickListener;
 import com.frost.themoviedb.ui.adapter.MoviesAdapter;
+import com.frost.themoviedb.ui.adapter.RecyclerClickListener;
 
 import java.util.List;
 
@@ -27,7 +27,7 @@ import static com.frost.themoviedb.common.Utils.isNetworkAvailable;
 import static com.frost.themoviedb.ui.adapter.MoviesAdapter.MOVIE_TYPE_POPULAR;
 
 public class PopularMoviesFragment extends BaseFragment implements PopularMoviesView,
-        AdapterClickListener<Movie> {
+        RecyclerClickListener {
 
     private static final String WITH_GENRES_EXTRA = "with_genres_extra";
 
@@ -121,7 +121,7 @@ public class PopularMoviesFragment extends BaseFragment implements PopularMovies
     }
 
     @Override
-    public void onItemClicked(int position, Movie data) {
-        presenter.switchToDetailedMovieScreen(data.getId());
+    public void recyclerItemClicked(int position) {
+        presenter.switchToDetailedMovieScreen(adapter.getMovies().get(position).getId());
     }
 }

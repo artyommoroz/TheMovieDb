@@ -24,7 +24,7 @@ public interface ApiService {
                                          @Query(value = "query", encoded = true) String query);
 
     @GET("movie/{id}")
-    Observable<DetailedMovie> getMovie(@Path(value = "id", encoded = true) long movieId,
+    Observable<DetailedMovie> getMovie(@Path("id") long movieId,
                                        @Query("api_key") String apiKey);
 
 

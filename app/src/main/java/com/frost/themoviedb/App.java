@@ -21,7 +21,6 @@ public class App extends Application {
 
     public static App INSTANCE;
     private static ApplicationComponent appComponent;
-    private RealmConfiguration config;
 
     public static ApplicationComponent getApplicationComponent() {
         return appComponent;
@@ -42,20 +41,8 @@ public class App extends Application {
         if (BuildConfig.DEBUG) {
             Stetho.initializeWithDefaults(this);
         }
-
-        initRealm();
     }
 
-    private void initRealm() {
-        Realm.init(this);
-        config = new RealmConfiguration.Builder()
-                .deleteRealmIfMigrationNeeded()
-                .build();
-    }
-
-    public Realm getRealmInstance() {
-        return Realm.getInstance(config);
-    }
 
     @Override
     protected void attachBaseContext(Context base) {

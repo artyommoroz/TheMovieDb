@@ -19,6 +19,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 import static android.view.View.VISIBLE;
 import static com.frost.themoviedb.common.Constants.IMAGE_PATH;
@@ -27,9 +28,9 @@ public class DetailedMoviesAdapter extends RecyclerView.Adapter<DetailedMoviesAd
 
     private List<DetailedMovie> detailedMovies = new ArrayList<>();
     private Context context;
-    private AdapterClickListener<DetailedMovie> clickListener;
+    private RecyclerClickListener clickListener;
 
-    public DetailedMoviesAdapter(Context context, AdapterClickListener<DetailedMovie> clickListener) {
+    public DetailedMoviesAdapter(Context context, RecyclerClickListener clickListener) {
         this.context = context;
         this.clickListener = clickListener;
     }
@@ -46,7 +47,7 @@ public class DetailedMoviesAdapter extends RecyclerView.Adapter<DetailedMoviesAd
     @Override
     public DetailedMoviesAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_movie, parent, false);
-        return new DetailedMoviesAdapter.ViewHolder(view);
+        return new DetailedMoviesAdapter.ViewHolder(view, clickListener);
     }
 
     @Override
@@ -62,9 +63,6 @@ public class DetailedMoviesAdapter extends RecyclerView.Adapter<DetailedMoviesAd
                     .load(IMAGE_PATH + movie.getPosterPath())
                     .into(holder.imageViewPoster);
         }
-        holder.root.setOnClickListener(view -> {
-            clickListener.onItemClicked(position, movie);
-        });
     }
 
     @Override
@@ -83,9 +81,17 @@ public class DetailedMoviesAdapter extends RecyclerView.Adapter<DetailedMoviesAd
         @BindView(R.id.text_view_overview)
         TextView textViewOverview;
 
-        ViewHolder(View view) {
+        ViewHolder(View view, RecyclerClickListener listener) {
             super(view);
             ButterKnife.bind(this, view);
+            if (clickListener != null) {
+                clickListener = listener;
+            }
+        }
+
+        @OnClick(R.id.root)
+        void onRootClicked() {
+            clickListener.recyclerItemClicked(getAdapterPosition());
         }
     }
 }

@@ -1,8 +1,6 @@
 package com.frost.themoviedb.database.model;
 
 
-import com.frost.themoviedb.network.model.Genre;
-
 import java.util.List;
 
 import io.realm.RealmList;

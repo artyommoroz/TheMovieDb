@@ -24,6 +24,7 @@ import com.frost.themoviedb.presentation.view.MoviesView;
 import com.frost.themoviedb.ui.MainActivity;
 import com.frost.themoviedb.ui.adapter.AdapterClickListener;
 import com.frost.themoviedb.ui.adapter.MoviesAdapter;
+import com.frost.themoviedb.ui.adapter.RecyclerClickListener;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -36,7 +37,7 @@ import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 import static com.frost.themoviedb.ui.adapter.MoviesAdapter.MOVIE_TYPE_SEARCH;
 
-public class SearchMoviesFragment extends BaseFragment implements MoviesView, AdapterClickListener<Movie> {
+public class SearchMoviesFragment extends BaseFragment implements MoviesView, RecyclerClickListener{
 
     private static final long INTERVAL_MILLISECONDS = 300;
 
@@ -145,11 +146,6 @@ public class SearchMoviesFragment extends BaseFragment implements MoviesView, Ad
         showErrorDialog(errorMessage);
     }
 
-    @Override
-    public void onItemClicked(int position, Movie data) {
-        presenter.switchToDetailedMovieScreen(data.getId());
-    }
-
     private void initViews() {
         ((MainActivity) getActivity()).setSupportActionBar(toolbar);
 
@@ -158,5 +154,10 @@ public class SearchMoviesFragment extends BaseFragment implements MoviesView, Ad
                 LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
+    }
+
+    @Override
+    public void recyclerItemClicked(int position) {
+        presenter.switchToDetailedMovieScreen(adapter.getMovies().get(position).getId());
     }
 }

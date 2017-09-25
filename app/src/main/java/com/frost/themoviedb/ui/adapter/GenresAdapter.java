@@ -16,14 +16,17 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class GenresAdapter extends RecyclerView.Adapter<GenresAdapter.ViewHolder> {
 
     private List<Genre> genres = new ArrayList<>();
     private Context context;
-    private AdapterClickListener<Genre> clickListener;
+//    private AdapterClickListener<Genre> clickListener;
+    private RecyclerClickListener clickListener;
 
-    public GenresAdapter(Context context, AdapterClickListener<Genre> clickListener) {
+//    public GenresAdapter(Context context, AdapterClickListener<Genre> clickListener) {
+    public GenresAdapter(Context context, RecyclerClickListener clickListener) {
         this.context = context;
         this.clickListener = clickListener;
     }
@@ -40,7 +43,7 @@ public class GenresAdapter extends RecyclerView.Adapter<GenresAdapter.ViewHolder
     @Override
     public GenresAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_genre, parent, false);
-        return new GenresAdapter.ViewHolder(view);
+        return new GenresAdapter.ViewHolder(view, clickListener);
     }
 
     @Override
@@ -48,9 +51,6 @@ public class GenresAdapter extends RecyclerView.Adapter<GenresAdapter.ViewHolder
         Genre genre = genres.get(position);
         holder.checkBox.setText(genre.getName());
         holder.checkBox.setChecked(genre.isChecked());
-        holder.checkBox.setOnClickListener(view -> {
-            clickListener.onItemClicked(position, genre);
-        });
     }
 
     @Override
@@ -63,9 +63,17 @@ public class GenresAdapter extends RecyclerView.Adapter<GenresAdapter.ViewHolder
         @BindView(R.id.checkbox)
         CheckBox checkBox;
 
-        ViewHolder(View view) {
+        ViewHolder(View view, RecyclerClickListener listener) {
             super(view);
             ButterKnife.bind(this, view);
+            if (clickListener != null) {
+                clickListener = listener;
+            }
+        }
+
+        @OnClick(R.id.checkbox)
+        void onCheckBoxClicked() {
+            clickListener.recyclerItemClicked(getAdapterPosition());
         }
     }
 }

@@ -19,6 +19,7 @@ import com.frost.themoviedb.presentation.view.GenresView;
 import com.frost.themoviedb.ui.MainActivity;
 import com.frost.themoviedb.ui.adapter.AdapterClickListener;
 import com.frost.themoviedb.ui.adapter.GenresAdapter;
+import com.frost.themoviedb.ui.adapter.RecyclerClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +29,7 @@ import butterknife.BindView;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
-public class GenresFragment extends BaseFragment implements GenresView, AdapterClickListener<Genre> {
+public class GenresFragment extends BaseFragment implements GenresView, RecyclerClickListener {
 
     @InjectPresenter
     GenresPresenter presenter;
@@ -103,12 +104,6 @@ public class GenresFragment extends BaseFragment implements GenresView, AdapterC
         showErrorDialog(errorMessage);
     }
 
-    @Override
-    public void onItemClicked(int position, Genre data) {
-        data.setChecked(!data.isChecked());
-        adapter.notifyItemChanged(position);
-    }
-
     private void initViews() {
         toolbar.setTitle(getString(R.string.genres_toolbar_title));
         ((MainActivity) getActivity()).setSupportActionBar(toolbar);
@@ -130,5 +125,11 @@ public class GenresFragment extends BaseFragment implements GenresView, AdapterC
             }
         }
         return checkedGenres;
+    }
+
+    @Override
+    public void recyclerItemClicked(int position) {
+        adapter.getGenres().get(position).setChecked(!adapter.getGenres().get(position).isChecked());
+        adapter.notifyItemChanged(position);
     }
 }
