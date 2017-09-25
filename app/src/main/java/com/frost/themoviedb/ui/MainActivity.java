@@ -9,6 +9,7 @@ import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.frost.themoviedb.R;
 import com.frost.themoviedb.Screens;
+import com.frost.themoviedb.network.model.DetailedMovieContainer;
 import com.frost.themoviedb.network.model.Genre;
 import com.frost.themoviedb.presentation.presenter.MainActivityPresenter;
 import com.frost.themoviedb.presentation.view.MainActivityView;
@@ -60,7 +61,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainActivityVi
                 case Screens.SEARCH_MOVIES_SCREEN:
                     return SearchMoviesFragment.newInstance();
                 case Screens.MOVIE_SCREEN:
-                    return DetailedMovieFragment.newInstance((long) data);
+                    return DetailedMovieFragment.newInstance((DetailedMovieContainer) data);
                 case Screens.GENRES_SCREEN:
                     return GenresFragment.newInstance();
             }

@@ -79,14 +79,17 @@
         android:id="@+id/button_add_to_favorites"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/indent_8"
         android:layout_below="@id/text_view_genres"
         android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/indent_8"
         android:text="@string/detailed_movie_add_to_favorites" />
 
     <Button
         android:id="@+id/button_delete_from_favorites"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:enabled="false"
         android:layout_below="@id/button_add_to_favorites"
         android:layout_centerHorizontal="true"
         android:text="@string/detailed_movie_delete_from_favorites" />

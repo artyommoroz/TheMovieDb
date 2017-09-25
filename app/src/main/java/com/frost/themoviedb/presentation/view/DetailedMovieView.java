@@ -10,4 +10,6 @@ public interface DetailedMovieView extends MvpView {
     void onMovieAddedToFavorites();
 
     void onMovieDeletedFromFavorites();
+
+    void onError(String errorMessage);
 }

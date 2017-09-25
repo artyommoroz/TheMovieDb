@@ -10,4 +10,6 @@ public interface GenresView extends MvpView {
     void showProgress(boolean show);
 
     void setGenres(List<Genre> genres);
+
+    void onError(String errorMessage);
 }

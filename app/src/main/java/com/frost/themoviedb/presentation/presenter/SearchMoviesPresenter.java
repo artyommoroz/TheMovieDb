@@ -4,6 +4,7 @@ package com.frost.themoviedb.presentation.presenter;
 import com.frost.themoviedb.App;
 import com.frost.themoviedb.Screens;
 import com.frost.themoviedb.network.ApiManager;
+import com.frost.themoviedb.network.model.DetailedMovieContainer;
 import com.frost.themoviedb.presentation.view.MoviesView;
 import com.arellomobile.mvp.InjectViewState;
 
@@ -28,12 +29,12 @@ public class SearchMoviesPresenter extends BasePresenter<MoviesView> {
                 .subscribe(response -> {
                     getViewState().setMovies(response.getMovies());
                 }, throwable -> {
-                    throwable.getCause();
+                    getViewState().onError(throwable.toString());
                 }));
     }
 
     public void switchToDetailedMovieScreen(long movieId) {
-        router.navigateTo(Screens.MOVIE_SCREEN, movieId);
+        router.navigateTo(Screens.MOVIE_SCREEN, new DetailedMovieContainer(movieId, false));
     }
 
     public void onBackPressed() {

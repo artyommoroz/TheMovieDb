@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.frost.themoviedb.R;
-import com.frost.themoviedb.network.model.Movie;
+import com.frost.themoviedb.network.model.DetailedMovie;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,55 +20,42 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 import static com.frost.themoviedb.common.Constants.IMAGE_PATH;
 
-public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder> {
+public class DetailedMoviesAdapter extends RecyclerView.Adapter<DetailedMoviesAdapter.ViewHolder> {
 
-    public static final int MOVIE_TYPE_POPULAR = 1;
-    public static final int MOVIE_TYPE_SEARCH = 2;
-
-    private List<Movie> movies = new ArrayList<>();
+    private List<DetailedMovie> detailedMovies = new ArrayList<>();
     private Context context;
-    private int movieType;
-    private AdapterClickListener<Movie> clickListener;
+    private AdapterClickListener<DetailedMovie> clickListener;
 
-    public MoviesAdapter(Context context, int movieType, AdapterClickListener<Movie> clickListener) {
+    public DetailedMoviesAdapter(Context context, AdapterClickListener<DetailedMovie> clickListener) {
         this.context = context;
-        this.movieType = movieType;
         this.clickListener = clickListener;
     }
 
-    public void setMovies(List<Movie> movies) {
-        this.movies = movies;
+    public void setDetailedMovies(List<DetailedMovie> detailedMovies) {
+        this.detailedMovies = detailedMovies;
         notifyDataSetChanged();
     }
 
-    public void addMovies(List<Movie> movies) {
-        this.movies.addAll(movies);
-        notifyDataSetChanged();
-    }
-
-    public List<Movie> getMovies() {
-        return movies;
+    public List<DetailedMovie> getDetailedMovies() {
+        return detailedMovies;
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public DetailedMoviesAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_movie, parent, false);
-        return new MoviesAdapter.ViewHolder(view);
+        return new DetailedMoviesAdapter.ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(MoviesAdapter.ViewHolder holder, int position) {
-        Movie movie = movies.get(position);
+    public void onBindViewHolder(DetailedMoviesAdapter.ViewHolder holder, int position) {
+        DetailedMovie movie = detailedMovies.get(position);
         holder.textViewTitle.setText(movie.getTitle());
         holder.textViewOverview.setText(movie.getOverview());
-        holder.textViewReleaseDate.setText(String.valueOf(movie.getReleaseDate()));
 
-        holder.textViewOverview.setVisibility(movieType != MOVIE_TYPE_SEARCH ? VISIBLE : GONE);
-        holder.textViewReleaseDate.setVisibility(movieType == MOVIE_TYPE_SEARCH ? VISIBLE : GONE);
+        holder.textViewOverview.setVisibility(VISIBLE);
 
         if (!TextUtils.isEmpty(movie.getPosterPath())) {
             Glide.with(context)
@@ -82,7 +69,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
 
     @Override
     public int getItemCount() {
-        return movies.size();
+        return detailedMovies.size();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
@@ -95,8 +82,6 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
         TextView textViewTitle;
         @BindView(R.id.text_view_overview)
         TextView textViewOverview;
-        @BindView(R.id.text_view_release_date)
-        TextView textViewReleaseDate;
 
         ViewHolder(View view) {
             super(view);

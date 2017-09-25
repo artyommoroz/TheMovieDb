@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.frost.themoviedb.R;
+import com.frost.themoviedb.common.RxSearch;
 import com.frost.themoviedb.network.model.Movie;
 import com.frost.themoviedb.presentation.presenter.SearchMoviesPresenter;
 import com.frost.themoviedb.presentation.view.MoviesView;
@@ -25,8 +26,11 @@ import com.frost.themoviedb.ui.adapter.AdapterClickListener;
 import com.frost.themoviedb.ui.adapter.MoviesAdapter;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
@@ -34,9 +38,12 @@ import static com.frost.themoviedb.ui.adapter.MoviesAdapter.MOVIE_TYPE_SEARCH;
 
 public class SearchMoviesFragment extends BaseFragment implements MoviesView, AdapterClickListener<Movie> {
 
+    private static final long INTERVAL_MILLISECONDS = 300;
+
     @InjectPresenter
     SearchMoviesPresenter presenter;
 
+    //region view binding
     @BindView(R.id.toolbar_search)
     Toolbar toolbar;
     @BindView(R.id.progress_bar)
@@ -47,10 +54,14 @@ public class SearchMoviesFragment extends BaseFragment implements MoviesView, Ad
     RecyclerView recyclerView;
     @BindView(R.id.content_view)
     SwipeRefreshLayout contentView;
+    //endregion
 
-    // Initialize with default value because API requires query at least 1 character long
     private String query;
     private MoviesAdapter adapter;
+    private Disposable searchDisposable;
+
+    public SearchMoviesFragment() {
+    }
 
     public static SearchMoviesFragment newInstance() {
         SearchMoviesFragment fragment = new SearchMoviesFragment();
@@ -72,6 +83,14 @@ public class SearchMoviesFragment extends BaseFragment implements MoviesView, Ad
     }
 
     @Override
+    public void onDestroy() {
+        if (searchDisposable != null) {
+            searchDisposable.dispose();
+        }
+        super.onDestroy();
+    }
+
+    @Override
     protected int getLayoutRes() {
         return R.layout.fragment_search_movies;
     }
@@ -81,25 +100,16 @@ public class SearchMoviesFragment extends BaseFragment implements MoviesView, Ad
         inflater.inflate(R.menu.menu_search, menu);
         MenuItem searchMenuItem = menu.findItem(R.id.action_search);
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchMenuItem);
-        //TODO add Rx's debounce operator
         searchMenuItem.expandActionView();
         searchView.setIconifiedByDefault(false);
         searchView.setQuery(query, false);
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                if (!newText.isEmpty()) {
-                    query = newText;
-                    presenter.loadMovies(newText);
-                }
-                return false;
-            }
-        });
+        searchDisposable = RxSearch.fromSearchView(searchView)
+                .debounce(INTERVAL_MILLISECONDS, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(query -> {
+                    this.query = query;
+                    presenter.loadMovies(query);
+                });
         MenuItemCompat.setOnActionExpandListener(searchMenuItem, new MenuItemCompat.OnActionExpandListener() {
             @Override
             public boolean onMenuItemActionExpand(MenuItem item) {
@@ -128,6 +138,11 @@ public class SearchMoviesFragment extends BaseFragment implements MoviesView, Ad
     @Override
     public void showEmptyView(boolean show) {
         textViewEmpty.setVisibility(show ? VISIBLE : GONE);
+    }
+
+    @Override
+    public void onError(String errorMessage) {
+        showErrorDialog(errorMessage);
     }
 
     @Override

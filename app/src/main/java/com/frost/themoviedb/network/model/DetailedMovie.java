@@ -88,4 +88,12 @@ public class DetailedMovie {
     public void setGenres(List<Genre> genres) {
         this.genres = genres;
     }
+
+    public boolean isFavorite() {
+        return isFavorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        isFavorite = favorite;
+    }
 }

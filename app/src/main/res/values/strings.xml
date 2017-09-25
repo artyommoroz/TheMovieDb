@@ -17,4 +17,7 @@
     <string name="detailed_movie_delete_from_favorites">Delete from favorites</string>
     <string name="detailed_movie_toast_add_to_favorites">Movie has been successfully added to favorites!</string>
     <string name="detailed_movie_toast_delete_from_favorites">Movie has been successfully deleted from favorites!</string>
+    <string name="detailed_movie_genres">Genres: %s</string>
+
+    <string name="error_dialog_positive_button">Ок</string>
 </resources>

@@ -34,7 +34,7 @@ public class ContainerPresenter extends BasePresenter<ContainerView> {
     }
 
     public void convertGenreIdsToString(List<Genre> genres) {
-        if (genres != null) {
+        if (genres != null && !genres.isEmpty()) {
             StringBuilder genresString = new StringBuilder();
             for (Genre genre : genres) {
                 genresString.append(genre.getId()).append(",");

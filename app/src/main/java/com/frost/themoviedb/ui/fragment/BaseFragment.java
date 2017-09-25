@@ -5,12 +5,14 @@ import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.arellomobile.mvp.MvpAppCompatFragment;
+import com.frost.themoviedb.R;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -39,5 +41,13 @@ public abstract class BaseFragment extends MvpAppCompatFragment {
 
     public void showToastMessage(@StringRes int message) {
         Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+    }
+
+    public void showErrorDialog(String errorMessage) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage(errorMessage)
+                .setPositiveButton(R.string.error_dialog_positive_button, null);
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 }

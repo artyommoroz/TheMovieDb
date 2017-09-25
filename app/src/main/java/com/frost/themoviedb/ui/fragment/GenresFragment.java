@@ -33,6 +33,7 @@ public class GenresFragment extends BaseFragment implements GenresView, AdapterC
     @InjectPresenter
     GenresPresenter presenter;
 
+    //region view binding
     @BindView(R.id.toolbar_genres)
     Toolbar toolbar;
     @BindView(R.id.progress_bar)
@@ -41,8 +42,12 @@ public class GenresFragment extends BaseFragment implements GenresView, AdapterC
     RecyclerView recyclerView;
     @BindView(R.id.content_view)
     SwipeRefreshLayout contentView;
+    //endregion
 
     private GenresAdapter adapter;
+
+    public GenresFragment() {
+    }
 
     public static GenresFragment newInstance() {
         GenresFragment fragment = new GenresFragment();
@@ -94,6 +99,11 @@ public class GenresFragment extends BaseFragment implements GenresView, AdapterC
     }
 
     @Override
+    public void onError(String errorMessage) {
+        showErrorDialog(errorMessage);
+    }
+
+    @Override
     public void onItemClicked(int position, Genre data) {
         data.setChecked(!data.isChecked());
         adapter.notifyItemChanged(position);
@@ -103,6 +113,7 @@ public class GenresFragment extends BaseFragment implements GenresView, AdapterC
         toolbar.setTitle(getString(R.string.genres_toolbar_title));
         ((MainActivity) getActivity()).setSupportActionBar(toolbar);
         ((MainActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationOnClickListener(v -> presenter.onBackPressed());
 
         adapter = new GenresAdapter(getActivity(), this);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(),

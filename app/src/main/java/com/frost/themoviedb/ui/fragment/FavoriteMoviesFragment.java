@@ -2,6 +2,7 @@ package com.frost.themoviedb.ui.fragment;
 
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -9,10 +10,11 @@ import android.widget.TextView;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.frost.themoviedb.R;
-import com.frost.themoviedb.network.model.Movie;
+import com.frost.themoviedb.network.model.DetailedMovie;
 import com.frost.themoviedb.presentation.presenter.FavoriteMoviesPresenter;
 import com.frost.themoviedb.presentation.view.FavoriteMoviesView;
-import com.frost.themoviedb.presentation.view.MoviesView;
+import com.frost.themoviedb.ui.adapter.AdapterClickListener;
+import com.frost.themoviedb.ui.adapter.DetailedMoviesAdapter;
 
 import java.util.List;
 
@@ -21,7 +23,7 @@ import butterknife.BindView;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
-public class FavoriteMoviesFragment extends BaseFragment implements MoviesView {
+public class FavoriteMoviesFragment extends BaseFragment implements FavoriteMoviesView, AdapterClickListener<DetailedMovie> {
 
     @InjectPresenter
     FavoriteMoviesPresenter presenter;
@@ -34,6 +36,11 @@ public class FavoriteMoviesFragment extends BaseFragment implements MoviesView {
     RecyclerView recyclerView;
     @BindView(R.id.content_view)
     SwipeRefreshLayout contentView;
+
+    private DetailedMoviesAdapter adapter;
+
+    public FavoriteMoviesFragment() {
+    }
 
     public static FavoriteMoviesFragment newInstance() {
         FavoriteMoviesFragment fragment = new FavoriteMoviesFragment();
@@ -50,7 +57,18 @@ public class FavoriteMoviesFragment extends BaseFragment implements MoviesView {
     @Override
     public void onViewCreated(final View view, final Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        presenter.loadFavoriteMovies();
+        initViews();
+    }
 
+    private void initViews() {
+        contentView.setOnRefreshListener(() -> presenter.loadFavoriteMovies());
+
+        adapter = new DetailedMoviesAdapter(getActivity(), this);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(),
+                LinearLayoutManager.VERTICAL, false);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(adapter);
     }
 
     @Override
@@ -59,14 +77,19 @@ public class FavoriteMoviesFragment extends BaseFragment implements MoviesView {
     }
 
     @Override
-    public void setMovies(List<Movie> movies) {
+    public void setMovies(List<DetailedMovie> detailedMovies) {
         contentView.setRefreshing(false);
-//        adapter.setMovies(movies);
+        adapter.setDetailedMovies(detailedMovies);
     }
 
     @Override
     public void showEmptyView(boolean show) {
         contentView.setRefreshing(false);
         textViewEmpty.setVisibility(show ? VISIBLE : GONE);
+    }
+
+    @Override
+    public void onItemClicked(int position, DetailedMovie data) {
+        presenter.switchToDetailedMovieScreen(data.getId());
     }
 }

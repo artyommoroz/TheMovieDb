@@ -12,4 +12,6 @@ public interface MoviesView extends MvpView {
     void setMovies(List<Movie> movies);
 
     void showEmptyView(boolean show);
+
+    void onError(String errorMessage);
 }

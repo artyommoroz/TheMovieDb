@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.frost.themoviedb.R;
+import com.frost.themoviedb.common.EndlessScrollListener;
 import com.frost.themoviedb.network.model.Movie;
 import com.frost.themoviedb.presentation.presenter.PopularMoviesPresenter;
 import com.frost.themoviedb.presentation.view.PopularMoviesView;
@@ -22,6 +23,7 @@ import butterknife.BindView;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
+import static com.frost.themoviedb.common.Utils.isNetworkAvailable;
 import static com.frost.themoviedb.ui.adapter.MoviesAdapter.MOVIE_TYPE_POPULAR;
 
 public class PopularMoviesFragment extends BaseFragment implements PopularMoviesView,
@@ -44,6 +46,9 @@ public class PopularMoviesFragment extends BaseFragment implements PopularMovies
     private MoviesAdapter adapter;
     private String withGenres;
 
+    public PopularMoviesFragment() {
+    }
+
     public static PopularMoviesFragment newInstance(String withGenres) {
         PopularMoviesFragment fragment = new PopularMoviesFragment();
         Bundle args = new Bundle();
@@ -57,7 +62,7 @@ public class PopularMoviesFragment extends BaseFragment implements PopularMovies
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             withGenres = getArguments().getString(WITH_GENRES_EXTRA);
-            presenter.loadPopularMovies(1, withGenres);
+            presenter.loadPopularMovies(isNetworkAvailable(getActivity()), 1, withGenres);
         }
     }
 
@@ -84,21 +89,35 @@ public class PopularMoviesFragment extends BaseFragment implements PopularMovies
     }
 
     @Override
+    public void addMovies(List<Movie> movies) {
+        adapter.addMovies(movies);
+    }
+
+    @Override
     public void showEmptyView(boolean show) {
         contentView.setRefreshing(false);
         textViewEmpty.setVisibility(show ? VISIBLE : GONE);
     }
 
+    @Override
+    public void onError(String errorMessage) {
+        showErrorDialog(errorMessage);
+    }
+
     private void initViews() {
-        contentView.setOnRefreshListener(() -> {
-            presenter.loadPopularMovies(1, withGenres);
-        });
+        contentView.setOnRefreshListener(() -> presenter.loadPopularMovies(isNetworkAvailable(getActivity()), 1, withGenres));
 
         adapter = new MoviesAdapter(getActivity(), MOVIE_TYPE_POPULAR, this);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(),
                 LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
+        recyclerView.addOnScrollListener(new EndlessScrollListener(layoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount) {
+                presenter.loadMorePopularMovies(page, withGenres);
+            }
+        });
     }
 
     @Override

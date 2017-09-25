@@ -9,6 +9,8 @@ import com.frost.themoviedb.network.model.Genre;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.realm.RealmList;
+
 public class DetailedMovieMapper implements Mapper<DetailedMovieDb, DetailedMovie> {
 
     @Override
@@ -21,6 +23,7 @@ public class DetailedMovieMapper implements Mapper<DetailedMovieDb, DetailedMovi
         detailedMovie.setReleaseDate(detailedMovieDb.getReleaseDate());
         detailedMovie.setVoteAverage(detailedMovieDb.getVoteAverage());
         detailedMovie.setVoteCount(detailedMovieDb.getVoteCount());
+        detailedMovie.setFavorite(detailedMovieDb.isFavorite());
         GenresMapper mapper = new GenresMapper();
         List<Genre> genres = new ArrayList<>();
         for (GenreDb genreDb : detailedMovieDb.getGenres()) {
@@ -40,8 +43,9 @@ public class DetailedMovieMapper implements Mapper<DetailedMovieDb, DetailedMovi
         detailedMovieDb.setReleaseDate(detailedMovie.getReleaseDate());
         detailedMovieDb.setVoteAverage(detailedMovie.getVoteAverage());
         detailedMovieDb.setVoteCount(detailedMovie.getVoteCount());
+        detailedMovieDb.setFavorite(detailedMovie.isFavorite());
         GenresMapper mapper = new GenresMapper();
-        List<GenreDb> genres = new ArrayList<>();
+        RealmList<GenreDb> genres = new RealmList<>();
         for (Genre genre : detailedMovie.getGenres()) {
             genres.add(mapper.convertTo(genre));
         }

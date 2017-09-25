@@ -13,6 +13,8 @@ public class Movie {
     private String posterPath;
     @SerializedName("overview")
     private String overview;
+    @SerializedName("release_date")
+    private String releaseDate;
 
     public long getId() {
         return id;
@@ -53,7 +55,4 @@ public class Movie {
     public void setReleaseDate(String releaseDate) {
         this.releaseDate = releaseDate;
     }
-
-    @SerializedName("release_date")
-    private String releaseDate;
 }

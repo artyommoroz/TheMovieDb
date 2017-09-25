@@ -38,6 +38,9 @@ public class ContainerFragment extends BaseFragment implements ContainerView {
 
     private List<Genre> genres;
 
+    public ContainerFragment() {
+    }
+
     public static ContainerFragment newInstance(ArrayList<Genre> genres) {
         ContainerFragment fragment = new ContainerFragment();
         Bundle args = new Bundle();
@@ -105,7 +108,7 @@ public class ContainerFragment extends BaseFragment implements ContainerView {
     }
 
     private void initViews() {
-        toolbar.setTitle("TMbd");
+        toolbar.setTitle(getString(R.string.app_name));
         ((MainActivity) getActivity()).setSupportActionBar(toolbar);
     }
 }

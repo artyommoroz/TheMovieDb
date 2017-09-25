@@ -10,6 +10,7 @@ import com.frost.themoviedb.di.component.ApplicationComponent;
 import com.frost.themoviedb.di.component.DaggerApplicationComponent;
 import com.frost.themoviedb.di.module.ApiModule;
 import com.frost.themoviedb.di.module.ApplicationModule;
+import com.frost.themoviedb.di.module.DatabaseModule;
 import com.frost.themoviedb.di.module.NavigationModule;
 
 import io.realm.Realm;
@@ -33,6 +34,7 @@ public class App extends Application {
         appComponent = DaggerApplicationComponent
                 .builder()
                 .apiModule(new ApiModule())
+                .databaseModule(new DatabaseModule())
                 .applicationModule(new ApplicationModule(this))
                 .navigationModule(new NavigationModule(Cicerone.create()))
                 .build();

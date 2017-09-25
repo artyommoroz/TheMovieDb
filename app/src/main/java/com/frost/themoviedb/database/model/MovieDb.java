@@ -1,15 +1,9 @@
 package com.frost.themoviedb.database.model;
 
-
-import com.frost.themoviedb.network.model.Genre;
-
-import java.util.List;
-
-import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
-public class DetailedMovieDb extends RealmObject {
+public class MovieDb extends RealmObject {
 
     @PrimaryKey
     private long id;
@@ -17,10 +11,6 @@ public class DetailedMovieDb extends RealmObject {
     private String posterPath;
     private String overview;
     private String releaseDate;
-    private double voteAverage;
-    private int voteCount;
-    private RealmList<GenreDb> genres = null;
-    private boolean isFavorite;
 
     public long getId() {
         return id;
@@ -60,37 +50,5 @@ public class DetailedMovieDb extends RealmObject {
 
     public void setReleaseDate(String releaseDate) {
         this.releaseDate = releaseDate;
-    }
-
-    public double getVoteAverage() {
-        return voteAverage;
-    }
-
-    public void setVoteAverage(double voteAverage) {
-        this.voteAverage = voteAverage;
-    }
-
-    public int getVoteCount() {
-        return voteCount;
-    }
-
-    public void setVoteCount(int voteCount) {
-        this.voteCount = voteCount;
-    }
-
-    public List<GenreDb> getGenres() {
-        return genres;
-    }
-
-    public void setGenres(RealmList<GenreDb> genres) {
-        this.genres = genres;
-    }
-
-    public boolean isFavorite() {
-        return isFavorite;
-    }
-
-    public void setFavorite(boolean favorite) {
-        isFavorite = favorite;
     }
 }

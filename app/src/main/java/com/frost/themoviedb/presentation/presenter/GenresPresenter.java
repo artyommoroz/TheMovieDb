@@ -31,12 +31,14 @@ public class GenresPresenter extends BasePresenter<GenresView> {
                 .subscribe(response -> {
                     List<Genre> genres = response.getGenres();
                     getViewState().setGenres(genres);
-                }, throwable -> {
-                    throwable.getCause();
-                }));
+                }, throwable -> getViewState().onError(throwable.toString())));
     }
 
     public void applyCheckedGenres(List<Genre> genres) {
         router.newRootScreen(Screens.CONTAINER_SCREEN, genres);
+    }
+
+    public void onBackPressed() {
+        router.exit();
     }
 }
